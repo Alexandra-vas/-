@@ -5,7 +5,6 @@ double distance(double x1, double y1, double x2, double y2)
 {
     return sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
 }
-
 double calculateArea(double x1, double y1, double x2, double y2, double x3, double y3) 
 {
     double a = distance(x1, y1, x2, y2);
@@ -16,7 +15,6 @@ double calculateArea(double x1, double y1, double x2, double y2, double x3, doub
 
     return sqrt(p * (p - a) * (p - b) * (p - c));
 }
-
 int main() 
 {
     double x1, y1, x2, y2, x3, y3;
