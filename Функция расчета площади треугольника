@@ -1,41 +1,49 @@
 #include <cstdio>
 #include <cmath>
 
-double distance(double x1, double y1, double x2, double y2) 
+struct Point 
 {
-    return sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
+    double x;
+    double y;
+};
+
+double distance(const Point& p1, const Point& p2) 
+{
+    return sqrt((p2.x - p1.x)*(p2.x - p1.x) + (p2.y - p1.y)*(p2.y - p1.y));
 }
-double calculateArea(double x1, double y1, double x2, double y2, double x3, double y3) 
+
+double calculateArea(const Point& p1, const Point& p2, const Point& p3) 
 {
-    double a = distance(x1, y1, x2, y2);
-    double b = distance(x2, y2, x3, y3);
-    double c = distance(x3, y3, x1, y1);
+    double a = distance(p1, p2);
+    double b = distance(p2, p3);
+    double c = distance(p3, p1);
 
     double p = (a + b + c) / 2;
-    if(p <= a || p <= b||p<=c)
+    if(p <= a || p <= b || p <= c) 
     {
         return 0;
     }
 
     return sqrt(p * (p - a) * (p - b) * (p - c));
 }
+
 int main() 
 {
-    double x1, y1, x2, y2, x3, y3;
+    Point p1, p2, p3;
 
     printf("Введите координаты первой точки (x1 y1): ");
-    scanf("%lf %lf", &x1, &y1);
+    scanf("%lf %lf", &p1.x, &p1.y);
 
     printf("Введите координаты второй точки (x2 y2): ");
-    scanf("%lf %lf", &x2, &y2);
+    scanf("%lf %lf", &p2.x, &p2.y);
 
     printf("Введите координаты третьей точки (x3 y3): ");
-    scanf("%lf %lf", &x3, &y3);
+    scanf("%lf %lf", &p3.x, &p3.y);
 
-    double area = calculateArea(x1, y1, x2, y2, x3, y3);
+    double area = calculateArea(p1, p2, p3);
     if (area > 0) 
     {  
-        printf("Площадь треугольника: %.4f\n", area);
+        printf("Площадь треугольника: %.4f", area);
     } else 
     {
         printf("Точки лежат на одной линии или треугольник не существует.\n");
