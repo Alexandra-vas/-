@@ -26,7 +26,7 @@ void inorderTraversal(TreeNode* root)
     if (root == nullptr) return;
 
     inorderTraversal(root->left);
-    std::cout << root->value << " ";
+    printf("%d", root->value);
     inorderTraversal(root->right);
 }
 
@@ -43,9 +43,9 @@ int main()
 {
     TreeNode* root = createTree();
 
-    std::cout << "Inorder Traversal: ";
+    printf("Бинарное дерево: ");
     inorderTraversal(root);
-    std::cout << std::endl;
+    printf("\n");
 
     deleteTree(root);
 
