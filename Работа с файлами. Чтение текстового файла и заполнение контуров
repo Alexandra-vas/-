@@ -2,17 +2,20 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#define ROWS 5
+#define COLS 10
+
 bool isContourClosed(char** image, int rows, int cols) 
 {
     for (int i = 0; i < rows; i++) 
     {
         for (int j = 0; j < cols; j++) 
         {
-            if (i == 0 || i == rows - 1 || j == 0 || j == cols - 1) 
+            if (i == 0 || i == rows -1 || j == 0 || j == cols -1) 
             {
                 if (image[i][j] != '*') 
                 {
-                    return false; 
+                    return false;
                 }
             }
         }
@@ -20,58 +23,82 @@ bool isContourClosed(char** image, int rows, int cols)
     return true;
 }
 
-int main() 
+char** allocateImage(int rows, int cols) 
 {
-    int rows = 5;
-    int cols = 10;
-
     char** image = (char**)malloc(rows * sizeof(char*));
-    for (int i = 0; i < rows; i++) 
+    for (int i = 0; i < rows; i++)
     {
         image[i] = (char*)malloc(cols * sizeof(char));
     }
+    return image;
+}
+
+void freeImage(char** image, int rows) 
+{
+    for (int i = 0; i < rows; i++)
+    {
+        free(image[i]);
+    }
+    free(image);
+}
+
+int main() {
+    char** image = allocateImage(ROWS, COLS);
+    bool imageLoaded = false;
 
     FILE* inputFile = fopen("image.txt", "r");
     if (inputFile != NULL) 
     {
         printf("Чтение изображения из файла:\n");
-        for (int i = 0; i < rows; i++)
+        for (int i = 0; i < ROWS; i++) 
         {
-            for (int j = 0; j < cols; j++)
+            for (int j = 0; j < COLS; j++) 
             {
-                char ch = fgetc(inputFile);
-                while (ch == '\n' || ch == '\r') 
+                int ch = fgetc(inputFile);
+                while (ch == '\n' || ch == '\r')
                 {
                     ch = fgetc(inputFile);
                 }
-                image[i][j] = ch;
+                if (ch == EOF) 
+                {
+                    image[i][j] = '.';
+                } else 
+                {
+                    image[i][j] = (char)ch;
+                }
                 printf("%c", image[i][j]);
             }
             printf("\n");
         }
         fclose(inputFile);
+        imageLoaded = true;
     } else 
     {
         printf("Файл не найден, создаем новое изображение.\n");
-        
-        for (int i = 0; i < rows; i++) 
+        for (int i = 0; i < ROWS; i++) 
         {
-            for (int j = 0; j < cols; j++) 
+            for (int j = 0; j < COLS; j++) 
             {
-                if (i == 0 || i == rows - 1 || j == 0 || j == cols - 1) 
+                if (i == 0 || i == ROWS -1 || j == 0 || j == COLS -1) 
                 {
                     image[i][j] = '*';
-                } else
+                } else 
                 {
                     image[i][j] = '.';
                 }
+            }
+        }
+        for (int i = 0; i < ROWS; i++)
+        {
+            for (int j = 0; j < COLS; j++)
+            {
                 printf("%c", image[i][j]);
             }
             printf("\n");
         }
     }
 
-    if (isContourClosed(image, rows, cols)) 
+    if (isContourClosed(image, ROWS, COLS)) 
     {
         printf("\nКонтур замкнут.\n");
     } else 
@@ -82,26 +109,37 @@ int main()
     FILE* outputFile = fopen("image.txt", "w");
     if (outputFile != NULL) 
     {
-        for (int i = 0; i < rows; i++) 
+        for (int i = 0; i < ROWS; i++) 
         {
-            for (int j = 0; j < cols; j++) 
+            for (int j = 0; j < COLS; j++)
             {
-                fprintf(outputFile, "%c", image[i][j]);
+                fputc(image[i][j], outputFile);
             }
-            fprintf(outputFile, "\n");
+            fputc('\n', outputFile);
         }
         fclose(outputFile);
-        printf("Изображение сохранено в image.txt\n");
+        printf("Рисунок успешно записан в файл image.txt");
     } else 
     {
-        printf("Ошибка сохранения файла.\n");
+        printf("Не удалось открыть файл для записи.\n");
     }
 
-    for (int i = 0; i < rows; i++) 
+    printf("\nЧтение из файла:\n");
+    inputFile = fopen("image.txt", "r");
+    if (inputFile != NULL)
     {
-        free(image[i]);
+        int ch;
+        while ((ch = fgetc(inputFile)) != EOF) 
+        {
+            putchar(ch);
+        }
+        fclose(inputFile);
+    } else 
+    {
+        printf("Не удалось открыть файл для чтения.\n");
     }
-    free(image);
+
+    freeImage(image, ROWS);
 
     return 0;
 }
