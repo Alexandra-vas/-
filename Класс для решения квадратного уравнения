@@ -1,0 +1,31 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+    double a, b, c, d, x1, x2;
+
+    printf("Введите a\n");
+    scanf("%lf", &a);
+    printf("Введите b\n");
+    scanf("%lf", &b);
+    printf("Введите c\n");
+    scanf("%lf", &c);
+
+    d = b * b - 4 * a * c;
+    if (d > 0)
+    {
+        x1 = ((-b) + sqrt(d)) / (2 * a);
+        x2 = ((-b) - sqrt(d)) / (2 * a);
+        printf("x1 = %lf\n", x1);
+        printf("x2 = %lf\n", x2);
+    }
+    if (d == 0)
+    {
+        x1 = -(b / (2 * a));
+        printf("x1 = x2 = %lf\n", x1);
+    }
+    if (d < 0)
+        printf("D < 0, Действительных корней уравнения не существует\n");
+}
